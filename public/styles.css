@@ -1,0 +1,197 @@
+/* RESET & BODY */
+
+*,*:before,*:after{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;}
+
+body {
+  font-family: 'Raleway', sans-serif;
+  background-color: #4D3E6D;
+  color: #fff;
+  padding: 0;
+  margin: 0;
+}
+
+/* CONTROL PANEL */
+
+.control-panel {
+  max-width: 700px;
+  margin: auto;
+  margin-top: 50px;
+}
+
+.control-panel h1 {
+  font-size: 25px;
+  font-size: 2.5vmax;
+  font-weight: normal;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.control-panel-icons {
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
+.control-panel-icons li {
+  display: inline-block;
+  vertical-align: bottom;
+  list-style: none;
+  margin-left: 1%;
+  margin-right: 1%;
+}
+
+.control-panel-icons .icon {
+  width: 108px;
+  margin-bottom: 5px;
+}
+
+.control-panel-icons .data {
+  height: 20px;
+  font-size: 17px;
+}
+
+.btn {
+  background: none;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -webkit-border-radius: 0;
+  border-radius: 0;
+  box-shadow: none;
+  }
+
+.btn-light-switch {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.btn-light-switch g {
+  -webkit-transition: all .2s ease-in-out;
+  transition: all .2s ease-in-out;
+}
+
+.btn-light-switch.is-on g {
+  fill: #FFDC00;
+}
+
+  .btn-light-switch .light {
+    opacity: 0;
+  }
+
+  .btn-light-switch.is-on .light {
+    opacity: 1;
+  }
+
+/*.innter-therm, .outer-therm {
+  fill: red;
+}*/
+
+.btn-mic-switch.is-on g {
+  fill: #FC5C63;
+}
+
+.movement-status {
+  text-align: center;
+  margin-top: 40px;
+}
+
+/* LOGIN FORM */
+
+.login-form {
+  max-width: 440px;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin: auto;
+  margin-top: 20%;
+}
+
+  .login-form-password {
+    width: 100%;
+    height: 60px;
+    border: 0;
+    background: white;
+    font-size: 18px;
+    line-height: 1.4;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .login-form-btn {
+    font-size: 17px;
+    width: 100%;
+    height: 50px;
+    background: none;
+    background-color: #FC5C63;
+    border: 0;
+    color: white;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+/* ANIMATION */
+
+.animated {
+  -webkit-animation-duration: 1s;
+          animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+}
+
+@-webkit-keyframes shake {
+  0%, 100% {
+    -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+  }
+
+  10%, 30%, 50%, 70%, 90% {
+    -webkit-transform: translate3d(-10px, 0, 0);
+            transform: translate3d(-10px, 0, 0);
+  }
+
+  20%, 40%, 60%, 80% {
+    -webkit-transform: translate3d(10px, 0, 0);
+            transform: translate3d(10px, 0, 0);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+  }
+
+  10%, 30%, 50%, 70%, 90% {
+    -webkit-transform: translate3d(-10px, 0, 0);
+            transform: translate3d(-10px, 0, 0);
+  }
+
+  20%, 40%, 60%, 80% {
+    -webkit-transform: translate3d(10px, 0, 0);
+            transform: translate3d(10px, 0, 0);
+  }
+}
+
+.shake {
+  -webkit-animation-name: shake;
+          animation-name: shake;
+}
+
+@-webkit-keyframes fadeOut {
+  0% {opacity: 1;}
+  100% {opacity: 0;}
+}
+
+@keyframes fadeOut {
+  0% {opacity: 1;}
+  100% {opacity: 0;}
+}
+
+.fadeOut {
+  -webkit-animation-name: fadeOut;
+          animation-name: fadeOut;
+}

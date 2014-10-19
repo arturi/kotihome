@@ -1,0 +1,16 @@
+{
+  "homeControllerUrl" : " http://example.com",
+  "notifyIfMovement": false,
+  "adminCredentials": {
+    "sessionSecret": "secret",
+    "password": "pass"
+  },
+  "emailCredentials": {
+    "host": "smtp.gmail.com",
+    "port": 465,
+    "user": "username@gmail.com",
+    "pass": "password",
+    "to": "user@example.com",
+    "from": "Robot <robot@example.com>"
+  }
+}
