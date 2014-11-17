@@ -179,7 +179,7 @@ void sendGET() {
   if (client.connect(removeServer, removeServerPort)) {
     Serial.println("connected");
     client.println("GET /movement-alert HTTP/1.0");
-    client.println("Host: home.arturpaikin.com:80");
+    client.println("Host: home.example.com:80");
     client.println("Connection: close");
     client.println();
   } else {
