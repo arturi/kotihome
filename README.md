@@ -3,7 +3,7 @@ Koti Home
 
 ![koti home control panel](screenshot.png)
 
-Koti Home (the name comes from the Finnish word “koti” that means “home”) is a home automation system based on Arduino that I’ve built.
+Koti Home (the name comes from the Finnish word “koti” that means “home”) is a home automation system based on Arduino that I’ve built. See it [in action](http://youtu.be/p0GO6ct6n94).
 
 Right now supports the following features:
 
