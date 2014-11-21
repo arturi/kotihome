@@ -8,7 +8,8 @@
     "express": "^4.9.5",
     "express-handlebars": "^1.1.0",
     "express-session": "^1.8.2",
-    "moment-timezone": "^0.2.2",
+    "moment": "^2.8.4",
+    "moment-timezone": "^0.2.5",
     "nodemailer": "^1.0"
   },
   "devDependencies": {},

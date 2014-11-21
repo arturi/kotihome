@@ -5,12 +5,13 @@
 // The IP address will be dependent on your local network:
 byte mac[] = {
   0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-IPAddress ip(192,168,1,1);
+IPAddress ip(192,168,1,5);
 char removeServer[] = "example.com";
 int removeServerPort = 80;
 int pinLed = 7;
 int pinMovement = 6;
 int pinPump = 5;
+int pinRelay = 4;
 
 // Initialize the Ethernet server library
 EthernetServer server(45);
@@ -21,6 +22,7 @@ byte rip[] = {0,0,0,0};
 float temp;
 boolean isLedOn = false;
 boolean isMovement = false;
+boolean isRelayOn = false;
 String readString;
 long lastMovement;
 
@@ -31,6 +33,7 @@ void setup() {
   pinMode(pinLed, OUTPUT);
   pinMode(pinMovement, INPUT);
   pinMode(pinPump, OUTPUT);
+  pinMode(pinRelay, OUTPUT);
 
   // start the Ethernet connection and the server:
   Ethernet.begin(mac, ip);
@@ -108,17 +111,29 @@ void loop() {
 
           if (readString.indexOf("?data") > 0) {
             // output JSON with sensor data
+            // (JSON with Arduino, it's going to be a bumpy ride!
+            // http://www.youtube.com/watch?v=w8HZlWxtrfg)
             client.println("{");
+
             client.print("\"temp\"");
             client.print(": \"");
             client.print(temp);
             client.print("\"");
             client.print(",");
+
             client.println("");
             client.print("\"light\"");
             client.print(": \"");
             client.print(isLedOn);
             client.print("\"");
+            client.print(",");
+
+            client.println("");
+            client.print("\"relay\"");
+            client.print(": \"");
+            client.print(isRelayOn);
+            client.print("\"");
+
             client.println("}");
           }
 
@@ -134,14 +149,16 @@ void loop() {
             isLedOn = false;
           }
 
-          if (readString.indexOf("?pumpON") > 0) {
+          if (readString.indexOf("?relayON") > 0) {
             Serial.println("pump ON");
-            digitalWrite(pinPump, HIGH);
+            digitalWrite(pinRelay, HIGH);
+            isRelayOn = true;
           }
 
-          if (readString.indexOf("?pumpOFF") > 0) {
+          if (readString.indexOf("?relayOFF") > 0) {
             Serial.println("pump OFF");
-            digitalWrite(pinPump, LOW);
+            digitalWrite(pinRelay, LOW);
+            isRelayOn = false;
           }
 
 
@@ -179,7 +196,7 @@ void sendGET() {
   if (client.connect(removeServer, removeServerPort)) {
     Serial.println("connected");
     client.println("GET /movement-alert HTTP/1.0");
-    client.println("Host: home.arturpaikin.com:80");
+    client.println("Host: example:80");
     client.println("Connection: close");
     client.println();
   } else {

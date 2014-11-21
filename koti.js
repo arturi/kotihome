@@ -97,7 +97,8 @@ app.post('/options', checkAuth, function (req, res) {
 });
 
 app.get('/movement-alert', function (req, res) {
-  lastMovementTime = moment().tz('Europe/Moscow').format('HH:mm:ss, D.MM.YYYY');
+  // lastMovementTime = moment().tz('Europe/Moscow').format('HH:mm:ss, D.MM.YYYY');
+  lastMovementTime = moment().tz('Europe/Moscow');
   console.log('movement detected on ' + lastMovementTime);
   console.log('from: ' + req.ip);
   if (config.notifyIfMovement) {
@@ -114,11 +115,38 @@ app.get('/data', checkAuth, function (req, res) {
     })
     .on('end', function() {
       var body = Buffer.concat(bodyChunks);
-      bodyJson = JSON.parse(body.toString('utf8'));
+      var bodyJson;
+      try {
+        bodyJson = JSON.parse(body.toString('utf8'));
+      } catch (err) {
+        console.log(err);
+      }
       bodyJson.lastMovementTime = lastMovementTime;
       bodyJson = JSON.stringify(bodyJson);
       res.send(bodyJson);
     });
+  })
+  .on('error', function(e) {
+    console.log('Got error: ' + e.message);
+  });
+});
+
+app.get('/lightON', checkAuth, function (req, res) {
+  // light: 'ledON'
+  http.get(config.homeControllerUrl + 'ledON', function (resData) {
+    console.log('Light ON');
+    res.end();
+  })
+  .on('error', function(e) {
+    console.log('Got error: ' + e.message);
+  });
+});
+
+// Control light
+app.get('/lightOFF', checkAuth, function(req, res) {
+  http.get(config.homeControllerUrl + 'ledOFF', function (resData) {
+    console.log('Light OFF');
+    res.end();
   })
   .on('error', function(e) {
     console.log('Got error: ' + e.message);
@@ -135,14 +163,26 @@ app.get('/lightON', checkAuth, function (req, res) {
   });
 });
 
-app.get('/lightOFF', checkAuth, function(req, res){
-  http.get(config.homeControllerUrl + 'ledOFF', function (resData) {
-    console.log('Light OFF');
+// Control relay
+app.get('/relayON', checkAuth, function (req, res) {
+  http.get(config.homeControllerUrl + 'relayON', function (resData) {
+    console.log('Relay ON');
     res.end();
   })
   .on('error', function(e) {
     console.log('Got error: ' + e.message);
   });
 });
+
+app.get('/relayOFF', checkAuth, function (req, res) {
+  http.get(config.homeControllerUrl + 'relayOFF', function (resData) {
+    console.log('Relay OFF');
+    res.end();
+  })
+  .on('error', function(e) {
+    console.log('Got error: ' + e.message);
+  });
+});
+
 
 app.listen(3050);
