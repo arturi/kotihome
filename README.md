@@ -3,14 +3,14 @@ Koti Home
 
 ![koti home control panel](screenshot.png)
 
-Koti Home (the name comes from the Finnish word “koti” that means “home”) is a home automation system based on Arduino that I’ve built.
+Koti Home (the name comes from the Finnish word “koti” that means “home”) is a home automation system based on Arduino that I’ve built. See it [in action](http://youtu.be/p0GO6ct6n94).
 
 Right now supports the following features:
 
 * Showing home temperature (in Celsius)
 * Notifying by email (or text message with the help of [IFTTT](https://ifttt.com)) if movement occurred
 * Switching the light on and off remotely (might be any electronic device)
-* Voice commands like “turn the light on” and “what’ up” — the latter is a status update
+* Voice commands like “turn the light on” and “status update” and “make me coffee”
 
 Koti Home uses Node.js on a server (I use a [DigitalOcean VPS](https://www.digitalocean.com/?refcode=054bb617bf5e)), some JavaScript and Jquery on a client and Arduino Uno with a couple of sensors as a main controller hub.  
 
