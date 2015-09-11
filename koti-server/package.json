@@ -1,0 +1,26 @@
+{
+  "name": "koti-new",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel": "^5.8.21",
+    "body-parser": "^1.13.1",
+    "connect-redis": "^2.4.1",
+    "express": "^4.12.4",
+    "express-session": "^1.11.3",
+    "lodash": "^3.9.3",
+    "moment": "^2.10.3",
+    "mosca": "^0.29.0",
+    "mqtt": "^1.2.0",
+    "passport": "^0.2.2",
+    "passport-local": "^1.0.0",
+    "redis": "^0.12.1",
+    "request": "^2.58.0"
+  }
+}

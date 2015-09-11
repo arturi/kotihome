@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
+    <title>Koti</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300&subset=latin,cyrillic-ext" rel="stylesheet">
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      .dashboard {
+        height: 100%;
+        font-size: 0;
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 300;
+        color: white;
+      }
+
+      .dashboardInner {
+        max-width: 800px;
+        margin: auto;
+        padding-top: 70px;
+      }
+
+      .dashboard h1 {
+        font-size: 30px;
+        text-align: center;
+        font-weight: normal;
+      }
+
+      .dashboardItem {
+        width: 33.3333%;
+        height: 200px;
+        display: inline-block;
+        vertical-align: middle;
+        padding: 20px;
+        transform-style: preserve-3d;
+      }
+
+      .dashboardItemInner {
+        background-color: rgba(190, 61, 53, 0.5);
+        font-size: 16px;
+        text-align: center;
+        height: 100%;
+        transition: .3s all;
+      }
+
+        .dashboardItemInner:hover {
+          background-color: rgba(190, 61, 53, 0.8);
+        }
+
+      .dashboardItemBlock {
+        position: relative;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        -moz-transform: translateY(-50%);
+        transform: translateY(-50%);
+
+      }
+/*
+      .luxBlock {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+*/
+      .luxIcon {
+        display: block;
+        margin: auto;
+        margin-bottom: 10px;
+        width: 60px;
+        fill: white;
+      }
+
+/*      .homeTempBlock {
+        position: relative;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%);
+      }*/
+
+      .homeTempIcon {
+        display: block;
+        margin: auto;
+        margin-bottom: 10px;
+        width: 60px;
+        fill: white;
+      }
+
+        .homeTempIcon .tempIconLow,
+        .homeTempIcon .tempIconMid,
+        .homeTempIcon .tempIconHigh {
+          display: none;
+        }
+
+        .homeTempIcon.isLow .tempIconLow {
+          display: block;
+        }
+
+        .homeTempIcon.isMid .tempIconMid {
+          display: block;
+        }
+
+        .homeTempIcon.isHigh .tempIconHigh {
+          display: block;
+        }
+
+/*      .lampBlock {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+*/
+      .lampIcon {
+        display: block;
+        margin: auto;
+        width: 90px;
+        cursor: pointer;
+        fill: white;
+      }
+
+        .lampIcon.isOn {
+          fill: rgba(255, 252, 0, 0.8);
+          -webkit-filter: drop-shadow( 0 -15px 15px rgba(248,216,13,0.4) );
+        }
+
+/*      .motionBlock {
+        position: relative;
+        top: 50%;
+        transform: translateY(-50%);
+      }*/
+
+      .motionIcon {
+        display: block;
+        margin: auto;
+        margin-bottom: 10px;
+        width: 60px;
+        cursor: pointer;
+        fill: white;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <form action="/login" method="post">
+        <div>
+            <label>Username:</label>
+            <input type="text" name="username"/>
+        </div>
+        <div>
+            <label>Password:</label>
+            <input type="password" name="password"/>
+        </div>
+        <div>
+            <input type="submit" value="Log In"/>
+        </div>
+    </form>
+  </body>
+</html>
