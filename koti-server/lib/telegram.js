@@ -10,8 +10,6 @@ const telegram = {
   },
 
   sendMessage (lastUpdate, text) {
-    // request.post('https://api.telegram.org/bot' + config.telegramBotToken + '/sendMessage')
-    //   .form({chat_id: lastUpdate.from.id, text: text});
     request.post({
         url: 'https://api.telegram.org/bot' + config.telegramBotToken + '/sendMessage', 
         form: {chat_id: lastUpdate.from.id, text: text}
