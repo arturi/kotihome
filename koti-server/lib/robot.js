@@ -1,6 +1,6 @@
 import config from '../config.json';
 import telegram from './telegram';
-import request from 'request';
+import Got from 'got';
 import _ from 'lodash';
 
 const dictionary = {
@@ -32,7 +32,7 @@ const answers = {
   'ok': [
     'Ok', 'All right', 'Good', 'Sure'
   ],
-  'howDearYou': [
+  'howDareYou': [
     'Go away.', 'This is unbelivable', 'How dare you!'
   ],
   'sex': [
@@ -77,12 +77,16 @@ class Robot {
 
   hear (lastUpdate) {
     this.lastUpdate = lastUpdate;
-    this.match(lastUpdate.text);
+    return this.match(lastUpdate.text).then(function(result) {
+      return result;
+    })
+
   }
 
   match (str) {
     let words = this.getWords(this.normalize(str));
     let isQuestion = (str.indexOf('?') > -1) ? true : false;
+    let matchFound = false;
 
     console.log(words);
 
@@ -91,29 +95,39 @@ class Robot {
     }
 
     if ( containsAny(words, this.dictionary.greetings) ) {
-      this.react('hello', this.lastUpdate);
+      matchFound = true;
+      return this.react('hello', this.lastUpdate);
     }
 
     if ( containsAny(words, ['sex']) ) {
-      this.react('sex', this.lastUpdate);
+      matchFound = true;
+      return this.react('sex', this.lastUpdate);
     }
 
     if ( containsAny(words, ['status', 'home']) ) {
-      this.react('homeStatus', this.lastUpdate);
+      matchFound = true;
+      return this.react('homeStatus', this.lastUpdate);
     }
 
     if ( containsAny(words, ['weather']) ) {
-      this.react('weather', this.lastUpdate);
+      matchFound = true;
+      return this.react('weather', this.lastUpdate);
     }
 
     if ( containsAny(words, ['time']) ) {
-      this.react('time', this.lastUpdate);
+      matchFound = true;
+      return this.react('time', this.lastUpdate);
     }
 
     // if human is talking about light
-    // && containsAny(words, ['on', 'off'])
     if ( containsAny(words, ['light', 'lights']) ) {
-      this.react('light', this.lastUpdate);
+      matchFound = true;
+      return this.react('light', this.lastUpdate);
+    }
+
+    // nothing matched, return wat
+    if (!matchFound) {
+      return this.react('wat', this.lastUpdate);
     }
 
     this.lastInteraction = {
@@ -126,79 +140,108 @@ class Robot {
   react (action, lastUpdate) {
     let answer;
     console.log(action);
+    let self = this;
 
     switch (action) {
       case 'hello':
         answer = _.sample(this.answers.greetings);
-        this.say(this.lastUpdate, answer, 'telegram');
-        break;
+        return this.say(this.lastUpdate, answer, this.lastUpdate.method);
+        // break;
       case 'confirmation':
         answer = _.sample(this.answers.confirmations);
-        this.say(this.lastUpdate, answer, 'telegram');
+        return this.say(this.lastUpdate, answer, this.lastUpdate.method);
         break;
-      case 'howDearYou':
-        answer = _.sample(this.answers.howDearYou);
-        this.say(this.lastUpdate, answer, 'telegram');
+      case 'howDareYou':
+        answer = _.sample(this.answers.howDareYou);
+        return this.say(this.lastUpdate, answer, this.lastUpdate.method);
         break;
       case 'callNames':
         answer = _.sample(this.answers.callNames);
-        this.say(this.lastUpdate, answer, 'telegram');
+        return this.say(this.lastUpdate, answer, this.lastUpdate.method);
         break;
       case 'sex':
         answer = _.sample(this.answers.sex);
-        this.say(this.lastUpdate, answer, 'telegram');
+        return this.say(this.lastUpdate, answer, this.lastUpdate.method);
         break;
       case 'homeStatus':
-        if ( telegram.tremblingCreatureOrHaveITheRight(lastUpdate.from.username) ) {
-          let status = this.controller.getData();
+        function homeStatusAnswer() {
+          let status = self.controller.getData();
           let lightIs = status.lightIsOn ? 'on' : 'off';
-          answer = `${_.sample(this.answers.ok)}, the temperature is ${status.temp}°,
-                    light is ${lightIs}, last movement occured ${status.lastMotion.human}`;
-          this.say(this.lastUpdate, answer, 'telegram');
-        } else {
-          this.react('howDearYou', lastUpdate);
+          answer = `${_.sample(self.answers.ok)}, the temperature is ${status.temp}°, light is ${lightIs}, last movement occured ${status.lastMotion.human}`;
+          return self.say(self.lastUpdate, answer, self.lastUpdate.method);
         }
 
+        if (this.lastUpdate.method === 'telegram') {
+          if ( telegram.tremblingCreatureOrHaveITheRight(lastUpdate.from.username) ) {
+            return homeStatusAnswer();
+          } else {
+            return this.react('howDareYou', lastUpdate);
+          }
+        } else {
+          return homeStatusAnswer();
+        }
         break;
       case 'light':
-        if ( telegram.tremblingCreatureOrHaveITheRight(lastUpdate.from.username) ) {
-          this.controller.sendCommand('lightSwitch');
-          this.react('confirmation', lastUpdate)
+        function lightSwitch() {
+          console.log('here');
+          self.controller.sendCommand('lightSwitch');
+          return self.react('confirmation', lastUpdate);
+        }
+
+        if (this.lastUpdate.method === 'telegram') {
+          if ( telegram.tremblingCreatureOrHaveITheRight(lastUpdate.from.username) ) {
+            return lightSwitch();
+          } else {
+            return this.react('howDareYou', lastUpdate);
+          }
         } else {
-          this.react('howDearYou', lastUpdate);
+          return lightSwitch();
         }
         break;
       case 'time':
         answer = `It is ${Date.now()} o’clock, robot time`;
-        this.say(this.lastUpdate, answer, 'telegram');
+        return this.say(this.lastUpdate, answer, this.lastUpdate.method);
         break;
       case 'weather':
-        request.get(config.weatherAPI, (err, response, body) => {
-          if (!err && response.statusCode == 200) {
+        return new Promise((resolve, reject) => {
+          Got(config.weatherAPI).then(res => {
             let info;
             try {
-              info = JSON.parse(body);
+              info = JSON.parse(res.body);
             } catch (err) {
               console.log('error parsing weather JSON');
             }
             let weatherDescription = info.weather[0].description;
             let temp = Math.round(info.main.temp);
             answer = `${weatherDescription}, current temperature is ${temp}°`;
-            this.say(this.lastUpdate, answer, 'telegram');
-          }
+            resolve(this.say(this.lastUpdate, answer, this.lastUpdate.method));
+          })
+          .catch(err => {
+            console.error(err);
+            console.error(err.response && err.response.body);
+            reject(Error('Couldn’t lookup the weather data, probably something with the cloud.'));
+          });
         });
         break;
+      case 'wat':
+        answer = _.sample(this.answers.wat);
+        return this.say(this.lastUpdate, answer, this.lastUpdate.method);
       default:
         answer = _.sample(this.answers.wat);
-        this.say(this.lastUpdate, answer, 'telegram');
+        return this.say(this.lastUpdate, answer, this.lastUpdate.method);
     }
-
   }
 
-  say (lastUpdate, message, method) {
+  say (lastUpdate, answer, method) {
     if (method === 'telegram') {
-      telegram.sendMessage(lastUpdate, message);
+      telegram.sendMessage(lastUpdate, answer);
     }
+
+    if (method === 'microphone') {
+      console.log(answer);
+    }
+
+    return Promise.resolve(answer);
   }
 
 }

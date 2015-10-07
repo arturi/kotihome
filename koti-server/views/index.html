@@ -1,15 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, width=device-width">
     <title>Koti</title>
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300&subset=latin,cyrillic-ext" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js"></script>
-    <script src="fetch.js"></script>
-    <script src="https://fb.me/react-0.13.3.js"></script>
-    <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
-    <script src="main.jsx" type="text/jsx"></script>
 
     <style>
       * {
@@ -18,15 +13,11 @@
         box-sizing: border-box;
       }
 
-      html,
-      body {
-        height: 100%;
-      }
-
       .dashboard {
-        height: 100%;
-        font-size: 0;
+        height: 100vh;
+        min-height: 600px;
         font-family: 'Open Sans', sans-serif;
+        font-size: 0;
         font-weight: 300;
         color: white;
       }
@@ -52,6 +43,10 @@
         transform-style: preserve-3d;
       }
 
+        .dashboardItem--interactive {
+          cursor: pointer;
+        }
+
       .dashboardItemInner {
         background-color: rgba(190, 61, 53, 0.5);
         font-size: 16px;
@@ -70,15 +65,8 @@
         -webkit-transform: translateY(-50%);
         -moz-transform: translateY(-50%);
         transform: translateY(-50%);
+      }
 
-      }
-/*
-      .luxBlock {
-        position: relative;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-*/
       .luxIcon {
         display: block;
         margin: auto;
@@ -86,13 +74,6 @@
         width: 60px;
         fill: white;
       }
-
-/*      .homeTempBlock {
-        position: relative;
-        top: 50%;
-        -webkit-transform: translateY(-50%);
-        transform: translateY(-50%);
-      }*/
 
       .homeTempIcon {
         display: block;
@@ -120,12 +101,6 @@
           display: block;
         }
 
-/*      .lampBlock {
-        position: relative;
-        top: 50%;
-        transform: translateY(-50%);
-      }
-*/
       .lampIcon {
         display: block;
         margin: auto;
@@ -139,12 +114,6 @@
           -webkit-filter: drop-shadow( 0 -15px 15px rgba(248,216,13,0.4) );
         }
 
-/*      .motionBlock {
-        position: relative;
-        top: 50%;
-        transform: translateY(-50%);
-      }*/
-
       .motionIcon {
         display: block;
         margin: auto;
@@ -154,9 +123,25 @@
         fill: white;
       }
 
+      .micIcon {
+        display: block;
+        margin: auto;
+        margin-bottom: 10px;
+        width: 35px;
+        cursor: pointer;
+        fill: white;
+      }
+
+        .micIcon.isActive {
+          fill: rgba(0,0,0,0.8);
+        }
+
     </style>
   </head>
 
   <body>
+    <div id="root"></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="static/bundle.js"></script>
   </body>
 </html>

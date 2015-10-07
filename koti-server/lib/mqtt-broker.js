@@ -1,7 +1,7 @@
 import config from '../config.json';
 import mosca from 'mosca';
 
-var ascoltatore = {
+const ascoltatore = {
   type: 'redis',
   redis: require('redis'),
   db: 12,
@@ -10,7 +10,7 @@ var ascoltatore = {
   host: 'localhost'
 };
 
-var moscaSettings = {
+const moscaSettings = {
   host: '127.0.0.1',
   backend: ascoltatore,
   persistence: {
@@ -18,7 +18,7 @@ var moscaSettings = {
   }
 };
 
-var authenticate = function(client, username, password, callback) {
+let authenticate = function(client, username, password, callback) {
   if (username && password) {
     var authorized = (username === config.mqttCredentials.username &&
                       password.toString() === config.mqttCredentials.password);
@@ -30,23 +30,26 @@ var authenticate = function(client, username, password, callback) {
   }
 };
 
-var moscaServer = new mosca.Server(moscaSettings);
+let moscaServer;
+if (config.env === 'production') { 
+  moscaServer = new mosca.Server(moscaSettings);
 
-moscaServer.on('ready', function() {
-  moscaServer.authenticate = authenticate;
-  console.log('Mosca server is up and running');
-});
+  moscaServer.on('ready', function() {
+    moscaServer.authenticate = authenticate;
+    console.log('Mosca server is up and running');
+  });
 
-moscaServer.on('error', function(err) {
-  console.log(err);
-});
+  moscaServer.on('error', function(err) {
+    console.log(err);
+  });
 
-// moscaServer.on('published', function(packet, client) {
-//   console.log('Published', packet.payload.toString());
-// });
+  // moscaServer.on('published', function(packet, client) {
+  //   console.log('Published', packet.payload.toString());
+  // });
 
-moscaServer.on('clientConnected', function(client) {
-  console.log('Client connected', client.id);
-});
+  moscaServer.on('clientConnected', function(client) {
+    console.log('Client connected', client.id);
+  });
+}
 
 export default moscaServer;
