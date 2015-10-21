@@ -5,7 +5,7 @@ module.exports = {
   devtool: 'eval',
   entry: [
     'webpack-hot-middleware/client',
-    './lib/control-panel/app'
+    './lib/control-panel/App'
   ],
   output: {
     path: path.join(__dirname, 'dist'),
@@ -20,7 +20,25 @@ module.exports = {
     loaders: [{
       test: /\.js$/,
       loaders: ['babel'],
-      include: path.join(__dirname, 'lib/control-panel')
+      include: path.join(__dirname, 'lib/control-panel'),
+      "stage": 0,
+      "env": {
+        "development": {
+          "plugins": ["react-transform"],
+          "extra": {
+            "react-transform": {
+              "transforms": [{
+                "transform": "react-transform-hmr",
+                "imports": ["react"],
+                "locals": ["module"]
+              }, {
+                "transform": "react-transform-catch-errors",
+                "imports": ["react", "redbox-react"]
+              }]
+            }
+          }
+        }
+      }
     }]
   }
 };

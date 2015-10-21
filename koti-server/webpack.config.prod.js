@@ -4,7 +4,7 @@ var webpack = require('webpack');
 module.exports = {
   devtool: 'source-map',
   entry: [
-    './src/index'
+    './lib/control-panel/App'
   ],
   output: {
     path: path.join(__dirname, 'dist'),
@@ -28,7 +28,8 @@ module.exports = {
     loaders: [{
       test: /\.js$/,
       loaders: ['babel'],
-      include: path.join(__dirname, 'src')
+      'stage': 0,
+      include: path.join(__dirname, 'lib/control-panel')
     }]
   }
 };

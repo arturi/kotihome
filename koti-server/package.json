@@ -18,6 +18,7 @@
     "express": "^4.13.3",
     "express-session": "^1.11.3",
     "got": "^4.2.0",
+    "helmet": "^0.12.0",
     "lodash": "^3.9.3",
     "moment": "^2.10.3",
     "mosca": "^0.32.1",

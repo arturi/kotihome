@@ -30,7 +30,7 @@ const answers = {
     'You are welcome.', 'No problem!'
   ],
   'ok': [
-    'Ok', 'All right', 'Good', 'Sure'
+    'Ok', 'All right', 'Sure'
   ],
   'howDareYou': [
     'Go away.', 'This is unbelivable', 'How dare you!'
@@ -138,8 +138,8 @@ class Robot {
   }
 
   react (action, lastUpdate) {
-    let answer;
     console.log(action);
+    let answer;
     let self = this;
 
     switch (action) {
@@ -183,7 +183,7 @@ class Robot {
         break;
       case 'light':
         function lightSwitch() {
-          console.log('here');
+          // console.log('here');
           self.controller.sendCommand('lightSwitch');
           return self.react('confirmation', lastUpdate);
         }

@@ -1,0 +1,10 @@
+{
+  "apps" : [{
+    "name"        : "koti-server",
+    "script"      : "index.js",
+    "watch"       : true,
+    "env": {
+        "NODE_ENV": "production"
+    }
+  }]
+}

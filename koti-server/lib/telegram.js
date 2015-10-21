@@ -1,6 +1,6 @@
 import config from '../config.json';
 import got from 'got';
-import request from 'request';
+// import request from 'request';
 import _ from 'lodash';
 
 const telegram = {
@@ -11,8 +11,16 @@ const telegram = {
   },
 
   sendMessage (lastUpdate, text) {
-    got.post({
-      url: 'https://api.telegram.org/bot' + config.telegramBotToken + '/sendMessage', 
+    let opts = {
+      method: 'POST',
+      encoding: 'utf8',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({chat_id: lastUpdate.from.id, text: text})
+    }
+
+    got.post('https://api.telegram.org/bot' + config.telegramBotToken + '/sendMessage', {
       body: {chat_id: lastUpdate.from.id, text: text}
     })
     .catch(err => {
@@ -22,9 +30,9 @@ const telegram = {
     });
 
   //   request.post({
-  //       url: 'https://api.telegram.org/bot' + config.telegramBotToken + '/sendMessage', 
+  //       url: 'https://api.telegram.org/bot' + config.telegramBotToken + '/sendMessage',
   //       form: {chat_id: lastUpdate.from.id, text: text}
-  //     }, 
+  //     },
   //     function(err, httpResponse, body) {
   //       if (err) {
   //         return console.error('failed to send telegram message:', err);

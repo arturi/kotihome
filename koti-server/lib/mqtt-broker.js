@@ -1,6 +1,8 @@
 import config from '../config.json';
 import mosca from 'mosca';
 
+let isProduction = process.env.NODE_ENV === 'production';
+
 const ascoltatore = {
   type: 'redis',
   redis: require('redis'),
@@ -11,10 +13,17 @@ const ascoltatore = {
 };
 
 const moscaSettings = {
-  host: '127.0.0.1',
+  // host: '127.0.0.1',
+  // port: 8444,
   backend: ascoltatore,
   persistence: {
     factory: mosca.persistence.Redis
+  },
+  http: {
+    host: '127.0.0.1',
+    port: 8444,
+    bundle: true,
+    static: './'
   }
 };
 
@@ -31,7 +40,7 @@ let authenticate = function(client, username, password, callback) {
 };
 
 let moscaServer;
-if (config.env === 'production') { 
+if (isProduction) {
   moscaServer = new mosca.Server(moscaSettings);
 
   moscaServer.on('ready', function() {

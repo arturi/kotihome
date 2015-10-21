@@ -18,6 +18,7 @@ export default class Controller {
     });
 
     mqttClient.on('connect', () => {
+      console.log('connected!');
       this.mqttClient.subscribe('/koti/data');
     });
 
@@ -29,6 +30,10 @@ export default class Controller {
       if (topic === '/koti/data') {
         this.updateData(message);
       }
+    });
+
+    mqttClient.on('error', function(err) {
+      console.log(err);
     });
 
     this.mqttClient = mqttClient;

@@ -2,28 +2,37 @@ import config from '../config.json';
 import fs from 'fs';
 import path from 'path';
 import express from 'express';
+import helmet from 'helmet';
 import webpack from 'webpack';
-import webpackConfig from '../webpack.config.dev';
 import bodyParser from 'body-parser';
 import session from 'express-session';
 import RedisStore from 'connect-redis';
 import telegram from './telegram';
 import mqttServ from './mqtt-broker';
 
+let isProduction = process.env.NODE_ENV === 'production';
+let webpackConfig = isProduction ? require('../webpack.config.prod') : require('../webpack.config.dev');
+
+// if (isProduction) {
+//   webpackConfig = require('../webpack.config.prod');
+// } else {
+//   webpackConfig = require('../webpack.config.prod');
+// }
+
 export default function(controller, robot) {
 
   let compiler = webpack(webpackConfig);
 
   let app = express();
-  // let http = require('http').Server(app);
-  // let io = require('socket.io')(http);
-
+  app.use(helmet());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(express.static(__dirname + '/../dist'));
+  app.use('/static', express.static(path.join(__dirname, '../dist')));
+
+  console.log(path.join(__dirname, '../dist'));
 
   // use session store in production only
-  if (process.env.NODE_ENV === 'production') {
+  if (isProduction) {
     let redisStore = RedisStore(session);
 
     // Setup session middleware, Redis in this case
@@ -43,16 +52,16 @@ export default function(controller, robot) {
   }
 
   // use react hot realoading in development only
-  if (process.env.NODE_ENV === 'development') {
+  if (!isProduction) {
+    app.use(require('webpack-hot-middleware')(compiler));
     app.use(require('webpack-dev-middleware')(compiler, {
       noInfo: true,
       publicPath: webpackConfig.output.publicPath
     }));
-    app.use(require('webpack-hot-middleware')(compiler));
   }
 
   function checkAuth(req, res, next) {
-    if (process.env.NODE_ENV === 'development') return next();
+    if (!isProduction) return next();
 
     if (req.session.auth) {
       next();
@@ -66,16 +75,16 @@ export default function(controller, robot) {
       res.sendFile(path.join(__dirname + '/../views/login.html'));
     })
     .post(function(req, res) {
-    config.adminCredentials.users.forEach(function(user) {
-      if (req.body.username === user.username &&
-          req.body.password === user.password) {
-        req.session.auth = true;
-        res.redirect('/');
-      }
-      res.writeHead(403);
-      res.end('Wrong username or password');
+      config.adminCredentials.users.forEach(function(user) {
+        if (req.body.username === user.username &&
+            req.body.password === user.password) {
+          req.session.auth = true;
+          res.redirect('/');
+        }
+        res.writeHead(403);
+        res.end('Wrong username or password');
+      });
     });
-  });
 
   app.get('/logout', function(req, res) {
     delete req.session.auth;
@@ -88,7 +97,6 @@ export default function(controller, robot) {
 
   app.get('/data/:option?', checkAuth, function(req, res) {
     let option = req.params.option;
-    // console.log(controller.parsedData);
     if (option === 'raw') {
       res.send(controller.rawData);
     } else {
@@ -99,15 +107,16 @@ export default function(controller, robot) {
   app.get('/command/:item', checkAuth, function(req, res) {
     let command = req.params.item;
       controller.sendCommand(command);
-      if (command === 'light') {
-        setTimeout(function() {
-          let controllerData = controller.getData();
-          let light = (controllerData.light === 1 ? 'on' : 'off');
-          res.end('ok, light is ' + light);
-        }, 1000);
-      } else {
-        res.end('unknown command: ' + command);
-      }
+      res.end('ok');
+      // if (command === 'light') {
+      //   setTimeout(function() {
+      //     let controllerData = controller.getData();
+      //     let light = (controllerData.light === 1 ? 'on' : 'off');
+      //     res.end('ok, light is ' + light);
+      //   }, 1000);
+      // } else {
+      //   res.end('unknown command: ' + command);
+      // }
   });
 
   app.post('/api/:token/telegramBotUpdate', function(req, res) {
@@ -134,7 +143,7 @@ export default function(controller, robot) {
     }
     robot.hear(lastUpdate).then(function(reply) {
       res.json(reply);
-    }); 
+    });
   });
 
   let server = app.listen(3500, '127.0.0.1', function() {
@@ -143,6 +152,10 @@ export default function(controller, robot) {
       server.address().port
     );
   });
+
+  // if (isProduction) {
+  //   mqttServ.attachHttpServer(server);
+  // }
 
   let io = require('socket.io')(server);
 
@@ -160,10 +173,6 @@ export default function(controller, robot) {
       clearInterval(interval);
     });
   });
-
-  if (process.env.NODE_ENV === 'production') { 
-    mqttServ.attachHttpServer(server);
-  }
 
   return app;
 };

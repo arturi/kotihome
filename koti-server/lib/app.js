@@ -1,5 +1,3 @@
-'use strict';
-
 import Robot from './robot';
 import ExpressApp from './express-app.js';
 import Controller from './controller';

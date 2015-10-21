@@ -1,6 +1,6 @@
 'use strict';
 
-var config = require('./config.json');
+var config = require('../config.json');
 var controller = require('./arduino-serialport');
 var mqtt = require('mqtt');
 
