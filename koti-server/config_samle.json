@@ -1,0 +1,18 @@
+{
+  "telegramBotToken": "token:here",
+  "telegramUpdateToken": "theToken",
+  "telegramAllowedUsers": ["brad", "john"],
+  "weatherAPI": "http://api.openweathermap.org/data/2.5/weather?q=New+York&units=metric&appid=openweathermapToken",
+  "adminCredentials": {
+    "sessionSecret": "shouldbeSecret",
+    "users": [
+      {"username": "john", "password": "mypass"},
+      {"username": "brad", "password": "mypass"}
+    ]
+  },
+  "mqttCredentials": {
+    "broker": "wss://home.example.com:443",
+    "username": "user",
+    "password": "pass"
+  }
+}

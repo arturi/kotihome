@@ -1,0 +1,8 @@
+{
+  "portArduino1": "/dev/ttyACM0",
+  "mqttCredentials": {
+    "broker": "wss://home.example.com:443",
+    "username": "user", 
+    "password": "pass"
+  }
+}
