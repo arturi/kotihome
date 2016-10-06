@@ -1,9 +1,11 @@
 Koti Home
 ========
 
-![koti home control panel](screenshot.png)
+![koti home control panel](kotihome.jpg)
 
-Koti Home (the name comes from the Finnish word “koti” that means “home”) is a home automation system based on Arduino that I’ve built. See it [in action](http://youtu.be/p0GO6ct6n94).
+Koti Home (the name comes from the Finnish word “koti” that means “home”) is a home automation system based on Arduino that I’ve built. See it [in action](http://youtu.be/p0GO6ct6n94). I’ve writte a post about this project: http://arturpaikin.com/en/home-automation-experiments/ and also gave a talk at Queens.js, check out the [slides](http://bit.ly/notonfire) and [video](https://youtu.be/Z-NpPj6aKJE).
+
+:warning: __The code is a little outdated__
 
 Right now supports the following features:
 
