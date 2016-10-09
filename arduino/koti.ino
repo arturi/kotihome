@@ -1,3 +1,5 @@
+// json helper
+#include <ArduinoJson.h>
 // analog pins
 int tempPin = A5;
 int luxPin = A4;
@@ -25,28 +27,16 @@ void setup() {
 
 // main loop
 void loop() {
-
     Serial.println("");
-    Serial.print("{");
-    Serial.print("\"temp\": ");
-    Serial.print(getTemp());
-    Serial.print(",");
-    
-    Serial.print("\"lux\": ");
-    Serial.print(getLux());
-    Serial.print(",");
-    
-    Serial.print("\"motion\": ");
-    Serial.print(getMotion());
-    Serial.print(",");
-    
-    Serial.print("\"lightIsOn\": ");
-    Serial.print(lightIsON);
-    
-    Serial.print("}");
 
-    //Serial.println("");
-    
+    StaticJsonBuffer<200> jsonBuffer;
+    JsonObject& root = jsonBuffer.createObject();
+    root["temp"] = getTemp();
+    root["lux"] = getLux();
+    root["motion"] = getMotion();
+    root["lightIsOn"] = lightIsON;
+    root.printTo(Serial);
+
     if (stringComplete) {
       action(inputString);
       // clear the string:
