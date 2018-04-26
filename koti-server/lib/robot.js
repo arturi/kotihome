@@ -96,11 +96,6 @@ class Robot {
       return this.react('hello', this.lastUpdate);
     }
 
-    if ( containsAny(words, ['sex']) ) {
-      matchFound = true;
-      return this.react('sex', this.lastUpdate);
-    }
-
     if ( containsAny(words, ['status', 'home']) ) {
       matchFound = true;
       return this.react('homeStatus', this.lastUpdate);
