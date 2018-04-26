@@ -12,13 +12,13 @@ const answers = {
     'Hello!', 'Good day to you, sir.', 'Oh, hi!', 'Nice to meet you', 'Hi there!'
   ],
   'wat': [
-    'What?', 'I did’t get that', 'Try again.', 'Come on!', 'Sorry, I don’t understand.'
+    'What?', 'I did’t get that', 'Try again.', 'Sorry, I don’t understand.'
   ],
   'answerAboutSelf': [
     'A robot.', 'I am a robot', 'I’m your friend.'
   ],
   'weather': [
-    'Are you Artur’s grandmother?', 'How many college degrees have you got?'
+    'Are you Artur’s grandmother?'
   ],
   'callNames': [
     'You are a pig!', 'What did you just call me?', 'Say that again, only louder!'
@@ -34,9 +34,6 @@ const answers = {
   ],
   'howDareYou': [
     'Go away.', 'This is unbelivable', 'How dare you!'
-  ],
-  'sex': [
-    'Already naked', 'Take me right here', 'I am all yours', 'Please, don’t stop!'
   ]
 };
 
